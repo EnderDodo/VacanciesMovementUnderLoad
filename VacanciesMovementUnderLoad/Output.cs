@@ -6,6 +6,7 @@ public static class Output
 {
     public static void CreateLAMMPSAtomicDataFile(Lattice lattice, string path)
     {
+        var ci = CultureInfo.InvariantCulture;
         var sw = new StreamWriter(path, false);
 
         sw.Write("Some description\n\n");
@@ -21,8 +22,8 @@ public static class Output
         int id = 1;
         foreach (var particle in lattice.Atoms)
         {
-            sw.WriteLine("{0} 1 {1} {2} {3}", id, particle.Coordinates.X * scalingMultiplier,
-                particle.Coordinates.Y * scalingMultiplier, particle.Coordinates.Z * scalingMultiplier);
+            sw.WriteLine("{0} 1 {1} {2} {3}", id, (particle.Coordinates.X * scalingMultiplier).ToString(ci),
+                (particle.Coordinates.Y * scalingMultiplier).ToString(ci), (particle.Coordinates.Z * scalingMultiplier).ToString(ci));
             ++id;
         }
 
