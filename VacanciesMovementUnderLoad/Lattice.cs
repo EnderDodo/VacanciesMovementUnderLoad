@@ -46,9 +46,14 @@ public abstract class Lattice
 
     protected abstract void FillWithAtoms();
 
+    public void Fill()
+    {
+        FillWithAtoms();
+    }
+
     public void RemoveAtomByNumber(int n)
     {
-        if (Atoms.Count >= 0)
+        if (Atoms.Count >= 0 && n < Atoms.Count && n >= 0)
             Atoms.RemoveAt(n);
     }
 
@@ -57,23 +62,6 @@ public abstract class Lattice
         if (VertexAmountInEdge % 2 == 1)
             RemoveAtomByNumber((VertexAmountInEdge - 1) / 2 *
                                ((int)Math.Pow(VertexAmountInEdge, 2) + VertexAmountInEdge + 1));
-    }
-
-    public void StartSimulation(Simulation simulation)
-    {
-        Simulation = simulation;
-    }
-
-    public void SimulateAllAtoms()
-    {
-        while (Simulation.CurrTime <= Simulation.MaxTime)
-        {
-            Parallel.ForEach(Atoms, SetStermerVerletCoordinates);
-
-            Parallel.ForEach(Atoms, RepositionOneAtom);  //reposition each atom
-            
-            Simulation.CurrTime += Simulation.DeltaTime;
-        }
     }
 
     public void CountInteractionForceSumForOneAtom(Atom atom)
@@ -86,16 +74,17 @@ public abstract class Lattice
         }
     }
 
-    public void SetStermerVerletCoordinates(Atom atom)
-    {
-        CountInteractionForceSumForOneAtom(atom);
-        atom.StermerVerletCoordinates = atom.StermerVerletPosition(Simulation.CurrTime, Simulation.DeltaTime);
-        atom.InteractionForceSum = MyVector<double>.Zero;
-    }
-
     public void RepositionOneAtom(Atom atom)
     {
         atom.PreviousCoordinates = atom.Coordinates; //weak point
         atom.Coordinates = atom.StermerVerletCoordinates;
     }
+
+    public void ApplyExternalForceToAtomByNumber(int n, MyVector<double> force)
+    {
+        if (Atoms.Count > 0 && n < Atoms.Count && n >= 0)
+            Atoms.ElementAt(n).ExternalForce = force;
+    }
+    
+    //public void ReleaseExternalForceFromAllAtoms()
 }

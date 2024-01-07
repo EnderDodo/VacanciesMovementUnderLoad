@@ -6,9 +6,9 @@ public class ElementInfo
     public double Epsilon { get; }
     public double AtomicMass { get; }
 
-    public ElementInfo(double distance, double epsilon, double mass)
+    public ElementInfo(double equilibriumDistance, double epsilon, double mass)
     {
-        EquilibriumDistance = distance;
+        EquilibriumDistance = equilibriumDistance;
         Epsilon = epsilon;
         AtomicMass = mass;
     }
