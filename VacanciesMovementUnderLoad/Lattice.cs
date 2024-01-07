@@ -28,11 +28,11 @@ public abstract class Lattice
     protected List<Atom> CubicLattice(MyVector<double> startingPoint, int vertexAmountInEdge)
     {
         var atoms = new List<Atom>();
-        for (int x = 0; x < vertexAmountInEdge; x++)
+        for (int z = 0; z < vertexAmountInEdge; z++)
         {
             for (int y = 0; y < vertexAmountInEdge; y++)
             {
-                for (int z = 0; z < vertexAmountInEdge; z++)
+                for (int x = 0; x < vertexAmountInEdge; x++)
                 {
                     atoms.Add(new Atom(ElementInfo,
                         new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
