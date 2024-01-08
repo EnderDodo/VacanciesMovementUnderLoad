@@ -14,24 +14,36 @@ public class Simulation
         DeltaTime = deltaTime;
         SimulatedLattice = simulatedLattice;
     }
-    
-    public void SimulateAllAtoms()
+
+    public void SimulateAllAtoms(bool ifToWrite)
     {
+        int i = 0;
+        int n = 0;
         while (CurrTime <= MaxTime)
         {
             Parallel.ForEach(SimulatedLattice.Atoms, SetStermerVerletCoordinates);
 
-            Parallel.ForEach(SimulatedLattice.Atoms, SimulatedLattice.RepositionOneAtom);  //reposition each atom
-            
+            Parallel.ForEach(SimulatedLattice.Atoms, SimulatedLattice.RepositionOneAtom); //reposition each atom
+            if (ifToWrite)
+            {
+                i++;
+                if (i == 9)
+                {
+                    Output.CreateLAMMPSAtomicDataFile(SimulatedLattice, @$"C:\Users\Denis\Desktop\test2\po-{n}.txt");
+                    n++;
+                    i = 0;
+                }
+            }
+
+
             CurrTime += DeltaTime;
         }
     }
-    
+
     public void SetStermerVerletCoordinates(Atom atom)
     {
         SimulatedLattice.CountInteractionForceSumForOneAtom(atom);
         atom.StermerVerletCoordinates = atom.StermerVerletPosition(CurrTime, DeltaTime);
         atom.InteractionForceSum = MyVector<double>.Zero;
     }
-
 }

@@ -3,7 +3,7 @@
 // var info1 = new ElementInfo(1E-16, 1, 1);
 // var pcLattice = new PCLattice(info1, 11);
 
-var po = new ElementInfo(5.8872E-14, 1E-26, 2.08982E-29);
+var po = new ElementInfo(5.8872E-14, 1E-30, 2.08982E-29);
 var poLattice = new PCLattice(po, 5);
 poLattice.Fill();
 
@@ -19,13 +19,13 @@ poLattice.RemoveCentralAtom();
 
 Output.CreateLAMMPSAtomicDataFile(poLattice, @"C:\Users\Denis\Desktop\po-1.txt");
 
-var simulation = new Simulation(1E-15, 1E-16, poLattice);
-simulation.SimulateAllAtoms();
+var simulation = new Simulation(1E-13, 1E-16, poLattice);
+simulation.SimulateAllAtoms(false);
 
 Output.CreateLAMMPSAtomicDataFile(poLattice, @"C:\Users\Denis\Desktop\po-2.txt");
 
-poLattice.ApplyExternalForceToAtomByNumber(31, new MyVector<double>(0,0,1E-300));
-simulation = new Simulation(1E-15, 1E-16, poLattice);
-simulation.SimulateAllAtoms();
+poLattice.ApplyExternalForceToAtomByNumber(12, new MyVector<double>(0,0,1E-15));
+simulation = new Simulation(5E-13, 1E-16, poLattice);
+simulation.SimulateAllAtoms(true);
 
 Output.CreateLAMMPSAtomicDataFile(poLattice, @"C:\Users\Denis\Desktop\po-3.txt");

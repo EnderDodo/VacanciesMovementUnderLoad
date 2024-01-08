@@ -45,7 +45,7 @@ public abstract class Lattice
                         z == vertexAmountInEdge - 1)
                         atoms.Add(new Atom(ElementInfo,
                             new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
-                            startingPoint, 0));
+                            startingPoint, 1));
                     else
                         atoms.Add(new Atom(ElementInfo,
                             new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +

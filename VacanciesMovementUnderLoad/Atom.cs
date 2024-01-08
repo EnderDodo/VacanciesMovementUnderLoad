@@ -40,7 +40,7 @@ public class Atom
     public MyVector<double> LennardJonesInteractionForce(Atom other)
     {
         if (MyVector<double>.DistanceSquared(Coordinates, other.Coordinates) > 0)
-            return 12 * ElementInfo.Epsilon /
+            return -12 * ElementInfo.Epsilon /
                    Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 7) *
                    (Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 3) -
                     Math.Pow(ElementInfo.EquilibriumDistance, 6)) * Math.Pow(ElementInfo.EquilibriumDistance, 6) *
