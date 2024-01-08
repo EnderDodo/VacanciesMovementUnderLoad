@@ -16,9 +16,9 @@ public static class Output
 
         sw.Write("Atoms\n\n");
 
-        double scalingMultiplier = 1;
+        double scalingMultiplier = 2;
         if (lattice.ElementInfo.EquilibriumDistance < 1)
-            scalingMultiplier = Math.Pow(lattice.ElementInfo.EquilibriumDistance, -1);
+            scalingMultiplier *= Math.Pow(lattice.ElementInfo.EquilibriumDistance, -1);
         int id = 1;
         foreach (var particle in lattice.Atoms)
         {

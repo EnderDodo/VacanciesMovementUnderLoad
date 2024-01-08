@@ -49,6 +49,7 @@ public abstract class Lattice
     public void Fill()
     {
         FillWithAtoms();
+        Parallel.ForEach(Atoms, FillClosestAtoms);
     }
 
     public void RemoveAtomByNumber(int n)
@@ -64,12 +65,24 @@ public abstract class Lattice
                                ((int)Math.Pow(VertexAmountInEdge, 2) + VertexAmountInEdge + 1));
     }
 
+    public void FillClosestAtoms(Atom atom)
+    {
+        foreach (var atom1 in Atoms)
+        {
+            if (atom1 == atom)
+                continue;
+            if (MyVector<double>.DistanceSquared(atom.Coordinates, atom1.Coordinates) <=
+                4 * ElementInfo.EquilibriumDistance)
+            {
+                atom.ClosestAtoms.Add(atom1);
+            }
+        }
+    }
+    
     public void CountInteractionForceSumForOneAtom(Atom atom)
     {
-        foreach (var atom2 in Atoms)
+        foreach (var atom2 in atom.ClosestAtoms)
         {
-            if (atom2 == atom)
-                continue;
             atom.InteractionForceSum += atom.LennardJonesInteractionForce(atom2);
         }
     }
