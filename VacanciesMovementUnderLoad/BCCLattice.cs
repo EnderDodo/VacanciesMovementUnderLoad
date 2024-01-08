@@ -17,10 +17,10 @@ public class BCCLattice : Lattice
 
     protected override void FillWithAtoms()
     {
-        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge));
+        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge, true));
         Atoms.AddRange(CubicLattice(
             StartingPoint + new MyVector<double>
                 (new[] { EdgeLength / 2, EdgeLength / 2, EdgeLength / 2, 0 }),
-            VertexAmountInEdge - 1));
+            VertexAmountInEdge - 1, false));
     }
 }

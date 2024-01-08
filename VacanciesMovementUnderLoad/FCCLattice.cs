@@ -14,18 +14,18 @@ public class FCCLattice : Lattice
 
     protected override void FillWithAtoms()
     {
-        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge));
+        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge, true));
         Atoms.AddRange(CubicLattice(
             StartingPoint + new MyVector<double>
                 (new[] { EdgeLength / 2, EdgeLength / 2, 0, 0 }),
-            VertexAmountInEdge));
+            VertexAmountInEdge, false));
         Atoms.AddRange(CubicLattice(
             StartingPoint + new MyVector<double>
                 (new[] { EdgeLength / 2, 0, EdgeLength / 2, 0 }),
-            VertexAmountInEdge));
+            VertexAmountInEdge, false));
         Atoms.AddRange(CubicLattice(
             StartingPoint + new MyVector<double>
                 (new[] { 0, EdgeLength / 2, EdgeLength / 2, 0 }),
-            VertexAmountInEdge));
+            VertexAmountInEdge, false));
     }
 }

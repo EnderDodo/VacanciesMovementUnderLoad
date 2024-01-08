@@ -5,7 +5,6 @@ namespace VacanciesMovementUnderLoad;
 public abstract class Lattice
 {
     public MyVector<double> StartingPoint { get; }
-    public Simulation Simulation { get; set; }
     public ElementInfo ElementInfo { get; }
     public double EdgeLength { get; protected set; }
     public int VertexAmountInEdge { get; }
@@ -25,7 +24,7 @@ public abstract class Lattice
         Atoms = new List<Atom>();
     }
 
-    protected List<Atom> CubicLattice(MyVector<double> startingPoint, int vertexAmountInEdge)
+    protected List<Atom> CubicLattice(MyVector<double> startingPoint, int vertexAmountInEdge, bool isVertexLattice)
     {
         var atoms = new List<Atom>();
         for (int z = 0; z < vertexAmountInEdge; z++)
@@ -34,9 +33,23 @@ public abstract class Lattice
             {
                 for (int x = 0; x < vertexAmountInEdge; x++)
                 {
-                    atoms.Add(new Atom(ElementInfo,
-                        new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
-                        startingPoint));
+                    if (!isVertexLattice)
+                    {
+                        atoms.Add(new Atom(ElementInfo,
+                            new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
+                            startingPoint));
+                        continue;
+                    }
+
+                    if (x == 0 || x == vertexAmountInEdge - 1 || y == 0 || y == vertexAmountInEdge - 1 || z == 0 ||
+                        z == vertexAmountInEdge - 1)
+                        atoms.Add(new Atom(ElementInfo,
+                            new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
+                            startingPoint, 0));
+                    else
+                        atoms.Add(new Atom(ElementInfo,
+                            new MyVector<double>(new[] { x * EdgeLength, y * EdgeLength, z * EdgeLength, 0 }) +
+                            startingPoint));
                 }
             }
         }
@@ -78,7 +91,7 @@ public abstract class Lattice
             }
         }
     }
-    
+
     public void CountInteractionForceSumForOneAtom(Atom atom)
     {
         foreach (var atom2 in atom.ClosestAtoms)
@@ -98,6 +111,6 @@ public abstract class Lattice
         if (Atoms.Count > 0 && n < Atoms.Count && n >= 0)
             Atoms.ElementAt(n).ExternalForce = force;
     }
-    
+
     //public void ReleaseExternalForceFromAllAtoms()
 }

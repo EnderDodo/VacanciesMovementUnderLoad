@@ -11,6 +11,7 @@ public class Atom
 
     public MyVector<double> InteractionForceSum { get; set; }
     public MyVector<double> ExternalForce { get; set; }
+    public double ForceMultiplier { get; set; }
 
     public Atom(ElementInfo elementInfo, MyVector<double> coordinates)
     {
@@ -21,20 +22,35 @@ public class Atom
         Coordinates = coordinates;
         PreviousCoordinates = coordinates;
         StermerVerletCoordinates = coordinates;
+        ForceMultiplier = 1;
+    }
+
+    public Atom(ElementInfo elementInfo, MyVector<double> coordinates, double forceMultiplier)
+    {
+        ClosestAtoms = new List<Atom>();
+        InteractionForceSum = new MyVector<double>(0, 0, 0);
+        ExternalForce = new MyVector<double>(0, 0, 0);
+        ElementInfo = elementInfo;
+        Coordinates = coordinates;
+        PreviousCoordinates = coordinates;
+        StermerVerletCoordinates = coordinates;
+        ForceMultiplier = forceMultiplier;
     }
 
     public MyVector<double> LennardJonesInteractionForce(Atom other)
     {
-        return 12 * ElementInfo.Epsilon /
-               Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 7) *
-               (Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 3) -
-                Math.Pow(ElementInfo.EquilibriumDistance, 6)) * Math.Pow(ElementInfo.EquilibriumDistance, 6) *
-               (Coordinates - other.Coordinates);
+        if (MyVector<double>.DistanceSquared(Coordinates, other.Coordinates) > 0)
+            return 12 * ElementInfo.Epsilon /
+                   Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 7) *
+                   (Math.Pow(MyVector<double>.DistanceSquared(Coordinates, other.Coordinates), 3) -
+                    Math.Pow(ElementInfo.EquilibriumDistance, 6)) * Math.Pow(ElementInfo.EquilibriumDistance, 6) *
+                   (Coordinates - other.Coordinates);
+        return MyVector<double>.Zero;
     }
 
     public MyVector<double> Acceleration()
     {
-        return (InteractionForceSum + ExternalForce) / ElementInfo.AtomicMass;
+        return (InteractionForceSum * ForceMultiplier + ExternalForce) / ElementInfo.AtomicMass;
     }
 
     public MyVector<double> StermerVerletPosition(double time, double deltaTime)

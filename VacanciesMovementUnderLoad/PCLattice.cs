@@ -14,6 +14,6 @@ public class PCLattice : Lattice
 
     protected override void FillWithAtoms()
     {
-        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge));
+        Atoms.AddRange(CubicLattice(StartingPoint, VertexAmountInEdge, true));
     }
 }

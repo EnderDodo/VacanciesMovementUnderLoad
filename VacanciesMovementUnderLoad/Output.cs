@@ -16,7 +16,7 @@ public static class Output
 
         sw.Write("Atoms\n\n");
 
-        double scalingMultiplier = 2;
+        double scalingMultiplier = 3;
         if (lattice.ElementInfo.EquilibriumDistance < 1)
             scalingMultiplier *= Math.Pow(lattice.ElementInfo.EquilibriumDistance, -1);
         int id = 1;
